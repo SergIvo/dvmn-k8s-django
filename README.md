@@ -32,3 +32,23 @@ $ docker-compose run web ./manage.py createsuperuser
 `ALLOWED_HOSTS` -- настройка Django со списком разрешённых адресов. Если запрос прилетит на другой адрес, то сайт ответит ошибкой 400. Можно перечислить несколько адресов через запятую, например `127.0.0.1,192.168.0.1,site.test`. [Документация Django](https://docs.djangoproject.com/en/3.2/ref/settings/#allowed-hosts).
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
+
+## Запуск в кластере Kubernetes
+
+Чтобы запустить сайт в кластере, необходимо указать переменные окружения в манифесте `django-config.yaml`:
+```yaml
+data:
+  SECRET_KEY: <секретный ключ Django>
+  DEBUG: <"False" или "True"> 
+  ALLOWED_HOSTS: <сюда нужно добавить IP-адрес кластера>
+  DATABASE_URL: <адрес для подключения к базе данных PostgreSQL. В качестве хотса в ней должен быть указан адрес сервиса кластера для внешних подключений, например host.minikube.internal в Minikube>
+```
+
+Когда все переменные указаны, нужно добавить `configMap` в кластер. Это можно сделать следующей командой:
+```
+kubectl apply -f kubernetes/django-config.yaml
+```
+Далее можно запустить сайт:
+```
+kubectl apply -f kubernetes/django-deploy.yaml
+```

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        env: dev
+        app: django
+        tier: web
+    spec:
+      containers:
+      - name: django-container
+        envFrom:
+          - configMapRef:
+              name: django-config
+        image: django_app:latest
+        imagePullPolicy: Never
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django
+  labels:
+    env: dev
+spec:
+  selector:
+    app: django
+  ports:
+  - nodePort: 30300
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  type: NodePort
