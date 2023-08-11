@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: django-clearsessions
+  labels:
+    env: dev
+    app: django
+    tier: web
+spec:
+  containers:
+    - name: django-clearsessions
+      image: django_app:latest
+      imagePullPolicy: Never
+      command: [./manage.py, clearsessions]
+      envFrom:
+      - configMapRef:
+          name: django-config
+  restartPolicy: Never
