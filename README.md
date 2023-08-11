@@ -60,3 +60,7 @@ kubectl apply -f kubernetes/ingress-hosts.yaml
 ```
 kubectl apply -f kubernetes/django-deploy.yaml
 ```
+Также, для автоматического ежемесячного удаления сессий Django создайте запланированную задачу следующей командой:
+```
+kubectl apply -f kubernetes/django-clearsessions.yaml
+```
