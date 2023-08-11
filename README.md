@@ -40,7 +40,7 @@ $ docker-compose run web ./manage.py createsuperuser
 data:
   SECRET_KEY: <секретный ключ Django>
   DEBUG: <"False" или "True"> 
-  ALLOWED_HOSTS: <сюда нужно добавить IP-адрес кластера>
+  ALLOWED_HOSTS: star-burger.test
   DATABASE_URL: <адрес для подключения к базе данных PostgreSQL. В качестве хотса в ней должен быть указан адрес сервиса кластера для внешних подключений, например host.minikube.internal в Minikube>
 ```
 
@@ -48,7 +48,15 @@ data:
 ```
 kubectl apply -f kubernetes/django-config.yaml
 ```
-Далее можно запустить сайт:
+Для того, чтобы сайт можно было открыть в браузере, необходимо запустить и настроить Ingress. Запустить Ingress в Minikube можно следующей командой:
+```
+minikube addons enable ingress
+```
+После этого необходимо применить настройки Ingress:
+```
+kubectl apply -f kubernetes/ingress-hosts.yaml
+```
+После применения настроек сайт будет доступен в браузере по адресу `star-burger.test`. Запустить сайт можно следующией командой:
 ```
 kubectl apply -f kubernetes/django-deploy.yaml
 ```
