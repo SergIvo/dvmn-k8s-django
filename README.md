@@ -60,6 +60,10 @@ kubectl apply -f kubernetes/ingress-hosts.yaml
 ```
 kubectl apply -f kubernetes/django-deploy.yaml
 ```
+Чтобы применить миграции Django к базе данных, воспользуйтесь следующей командой:
+```
+kubectl apply -f kubernetes/django-migrate.yaml
+```
 Также, для автоматического ежемесячного удаления сессий Django создайте запланированную задачу следующей командой:
 ```
 kubectl apply -f kubernetes/django-clearsessions.yaml
